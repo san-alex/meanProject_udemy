@@ -2,7 +2,8 @@ const express = require("express");
 const path = require("path");
 // const bodyParser = require('body-parser');
 
-postRoutes = require('./routes/posts');
+const postRoutes = require('./routes/posts');
+const userRoutes = require('./routes/users');
 const mongoose = require("mongoose");
 
 const app = express();
@@ -36,6 +37,7 @@ app.use((req, res, next) => {
 });
 
 app.use(postRoutes);
+app.use(userRoutes);
 
 app.get((req, res, next) => {
   res.sendStatus(400);

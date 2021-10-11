@@ -1,0 +1,29 @@
+<mat-card>
+  <h1>Login form</h1>
+  <form (submit)="onFormSubmit(loginform)" #loginform="ngForm">
+    <mat-form-field>
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        matInput
+        ngModel
+        required
+        email
+      />
+    </mat-form-field>
+    <mat-form-field>
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        matInput
+        ngModel
+        required
+      />
+    </mat-form-field>
+    <button mat-raised-button color="accent">Login</button>
+  </form>
+</mat-card>
