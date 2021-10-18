@@ -7,6 +7,7 @@ import { UserService } from "../user.service";
   styleUrls: ['login.component.css']
 })
 export class LoginComponent {
+  isLoading = false;
 
   constructor(private authServ: UserService) {}
 
@@ -14,6 +15,7 @@ export class LoginComponent {
     if(event.invalid) {
       return;
     }
+    this.isLoading = true;
     this.authServ.login(event.value.email, event.value.password);
   }
 }

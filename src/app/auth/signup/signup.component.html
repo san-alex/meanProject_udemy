@@ -1,6 +1,7 @@
 <mat-card>
-  <h1>Signup form</h1>
-  <form (submit)="onFormSubmit(signupform)" #signupform="ngForm">
+  <mat-spinner *ngIf="isLoading"></mat-spinner>  
+  <form (submit)="onFormSubmit(signupform)" #signupform="ngForm" *ngIf="!isLoading">
+    <h1>Signup form</h1>
     <mat-form-field>
       <label for="email">Email</label>
       <input

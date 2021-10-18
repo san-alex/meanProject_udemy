@@ -1,6 +1,11 @@
 <mat-card>
-  <h1>Login form</h1>
-  <form (submit)="onFormSubmit(loginform)" #loginform="ngForm">
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <form
+    (submit)="onFormSubmit(loginform)"
+    #loginform="ngForm"
+    *ngIf="!isLoading"
+  >
+    <h1>Login form</h1>
     <mat-form-field>
       <label for="email">Email</label>
       <input
@@ -11,7 +16,11 @@
         ngModel
         required
         email
+        #emailInp="ngModel"
       />
+      <mat-error *ngIf="emailInp.invalid && emailInp.touched"
+        >email is not valid</mat-error
+      >
     </mat-form-field>
     <mat-form-field>
       <label for="password">Password</label>
@@ -22,7 +31,11 @@
         matInput
         ngModel
         required
+        #passwordInp="ngModel"
       />
+      <mat-error *ngIf="passwordInp.invalid && passwordInp.touched"
+        >password is not valid</mat-error
+      >
     </mat-form-field>
     <button mat-raised-button color="accent">Login</button>
   </form>
