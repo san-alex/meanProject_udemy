@@ -40,6 +40,7 @@ router.post(
       title: req.body.title,
       content: req.body.content,
       imagePath: url + "/images/" + req.file.filename,
+      creator: req.userData.userId,
     });
     console.log(post);
     post.save().then((createdPost) => {
@@ -69,10 +70,16 @@ router.put(
       title: req.body.title,
       content: req.body.content,
       imagePath: imagePath,
+      creator: req.userData.userId,
     });
-    console.log(post);
-    Post.updateOne({ _id: req.params.id }, post).then((result) => {
-      res.status(200).json({ message: "Update successful!" });
+    // console.log(post);
+    Post.updateOne(
+      { _id: req.params.id, creator: req.userData.userId },
+      post
+    ).then((result) => {
+      if (result.modifiedCount > 0)
+        res.status(200).json({ message: "Update successful!" });
+      else res.status(401).json({ message: "not auherized!" });
     });
   }
 );
@@ -110,10 +117,14 @@ router.get("/api/posts/:id", (req, res, next) => {
 });
 
 router.delete("/api/posts/:id", middleware, (req, res, next) => {
-  Post.deleteOne({ _id: req.params.id }).then((resp) => {
-    console.log(resp);
-    res.status(200).json({ message: "deleted successfully!" });
-  });
+  Post.deleteOne({ _id: req.params.id, creator: req.userData.userId }).then(
+    (resp) => {
+      console.log(resp);
+      if (resp.deletedCount > 0)
+        res.status(200).json({ message: "deleted successfully!" });
+      else res.status(401).json({ message: "not auherized!" });
+    }
+  );
 });
 
 module.exports = router;
