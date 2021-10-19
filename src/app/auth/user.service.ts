@@ -54,7 +54,9 @@ export class UserService {
       }
       console.log(response);
       this.router.navigate(['/']);
-    }, err => {console.log(err);});
+    }, err => {
+      this.authStatusListener.next(false);
+    });
   }
 
   signup(email: string, password: string) {
@@ -66,6 +68,8 @@ export class UserService {
     this.http.post(url, data).subscribe((res) => {
       console.log(res);
       this.router.navigate(['/']);
+    }, err => {
+      this.authStatusListener.next(false);
     });
   }
 

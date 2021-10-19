@@ -8,10 +8,10 @@ const router = express.Router();
 
 router.post("/api/user/login", (req, res, next) => {
   let fetcheduser;
-  //console.log(req.body.email, req.body.password);
+  // console.log(req.body.email, req.body.password);
   User.findOne({ email: req.body.email })
     .then((result) => {
-      // console.log(result);
+      // console.log("res\n"+result);
       if (!result) {
         return res.status(404).json({ message: "user not found!" });
       }
@@ -19,26 +19,27 @@ router.post("/api/user/login", (req, res, next) => {
       return bcrypt.compare(req.body.password, result.password);
     })
     .then((result) => {
-      // console.log(result);
-      if (!result) {
+      // console.log("res\n" + result);
+      if (!result)
         return res.status(500).json({ message: "invalid password!" });
-      }
-      const token = jwt.sign(
-        { email: fetcheduser.email, userId: fetcheduser._id },
-        "secret_this_should_be_longer",
-        { expiresIn: "1h" }
-      );
-      console.log('login success!');
-      res
-        .status(200)
-        .json({
+      if (result === true) {
+        // console.log("fetched user\n"+fetcheduser);
+        const token = jwt.sign(
+          { email: fetcheduser.email, userId: fetcheduser._id },
+          "secret_this_should_be_longer",
+          { expiresIn: "1h" }
+        );
+        console.log("login success!");
+        res.status(200).json({
           message: "login success!",
           token: token,
           expiresIn: 3600,
           userId: fetcheduser._id,
         });
+      }
     })
     .catch((err) => {
+      // console.log("err\n", err);
       res.status(500).json({ message: err });
     });
 });
@@ -57,7 +58,7 @@ router.post("/api/user/signup", (req, res, next) => {
       user
         .save()
         .then((result) => {
-          console.log('signed up success!');
+          console.log("signed up success!");
           res.status(201).json({ message: "user created successfully!" });
         })
         .catch((err) => {

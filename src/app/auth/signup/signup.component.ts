@@ -1,15 +1,26 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { NgForm } from "@angular/forms";
+import { Subscription } from "rxjs";
 import { UserService } from "../user.service";
 
 @Component({
   templateUrl: "signup.component.html",
   styleUrls: ["./signup.component.css"]
 })
-export class SignupComponent {
+export class SignupComponent implements OnInit, OnDestroy {
   isLoading = false;
 
+  private authStatusSub: Subscription;
+
   constructor(private authServ: UserService) {}
+
+  ngOnInit() {
+    this.authStatusSub = this.authServ.getAuthStatusListener().subscribe(
+      authStatus => {
+        this.isLoading = false;
+      }
+    );
+  }
 
   onFormSubmit(event: NgForm) {
     if(event.invalid) {
@@ -17,5 +28,9 @@ export class SignupComponent {
     }
     this.isLoading = true;
     this.authServ.signup(event.value.email, event.value.password);
+  }
+
+  ngOnDestroy() {
+    this.authStatusSub.unsubscribe();
   }
 }

@@ -126,7 +126,7 @@ export class PostsService {
           posts: [...this.posts],
           postCount: transformedPostData.maxPosts
         });
-      });
+      }, err => {});
   }
 
   getPostUpdateListener() {
